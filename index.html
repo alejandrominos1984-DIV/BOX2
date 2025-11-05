@@ -16,8 +16,11 @@
     <!-- Estilos personalizados y configuración de Tailwind -->
     <style>
         :root {
-            --bg-main: #111217; /* Fondo principal (azul muy oscuro) */
-            --bg-card: #1E1F24; /* Fondo de tarjetas (gris azulado) */
+            /* Nuevo fondo degradado */
+            --bg-gradient-start: #3a0015; /* Rojo oscuro */
+            --bg-gradient-end: #001a40;   /* Azul oscuro */
+            
+            --bg-card: rgba(28, 28, 30, 0.75); /* Tarjeta translúcida */
             --text-primary: #F2F2F7;
             --text-secondary: #8A8A8E;
             --accent-main: #6366F1; /* Acento principal (Índigo) */
@@ -27,8 +30,11 @@
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-main);
+            /* Aplicando el nuevo fondo degradado */
+            background-color: var(--bg-gradient-end);
+            background-image: linear-gradient(160deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             color: var(--text-primary);
+            background-attachment: fixed;
         }
         .main-container-mobile {
             padding-bottom: 100px;
@@ -36,6 +42,8 @@
         .card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
         .card:hover {
@@ -102,26 +110,6 @@
             border-radius: 1.5rem;
         }
 
-        /* Animación Menú Escritorio */
-        .desktop-nav-link {
-            position: relative;
-            padding-bottom: 8px;
-        }
-        .desktop-nav-link::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            height: 2px;
-            width: 0;
-            background-color: var(--accent-main);
-            transition: width 0.3s ease;
-        }
-        .desktop-nav-link:hover::after,
-        .desktop-nav-link.active::after {
-            width: 100%;
-        }
-
         /* Animación Menú Móvil */
         .mobile-nav-link {
             transition: transform 0.3s ease, color 0.3s ease;
@@ -135,38 +123,29 @@
 </head>
 <body class="antialiased">
 
-    <div class="main-container-mobile lg:main-container-desktop">
+    <div class="main-container-mobile">
         <!-- Cabecera -->
         <header class="sticky top-0 z-20 p-6 bg-black/50 backdrop-blur-xl border-b border-white/5">
-            <div class="flex justify-between items-center max-w-7xl mx-auto">
+            <div class="flex justify-between items-center max-w-lg mx-auto">
                 <h1 class="text-2xl font-black text-white">Boxeo <span class="text-indigo-400">Pro</span></h1>
-                
-                <!-- Navegación de Escritorio -->
-                <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
-                    <a href="#" class="desktop-nav-link active text-indigo-400">Inicio</a>
-                    <a href="#combos" class="desktop-nav-link text-gray-300 hover:text-white">Combos</a>
-                    <a href="#analisis-ia" class="desktop-nav-link text-gray-300 hover:text-white">Análisis IA</a>
-                    <a href="#leyendas" class="desktop-nav-link text-gray-300 hover:text-white">Leyendas</a>
-                    <a href="#" class="desktop-nav-link text-gray-300 hover:text-white">Perfil</a>
-                </nav>
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-lg mx-auto">
             <!-- Contenido principal -->
             <main class="space-y-16 mt-8 px-6">
                 
                 <!-- Sección "Hoy para ti" -->
                 <div>
-                    <h2 class="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">Hoy para ti</h2>
-                    <div class="card rounded-3xl overflow-hidden relative aspect-video lg:aspect-[2.5/1]">
+                    <h2 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Hoy para ti</h2>
+                    <div class="card rounded-3xl overflow-hidden relative aspect-video">
                         <img src="https://i.postimg.cc/43B03Bt0/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.jpg" alt="Rutina de combo de velocidad" class="absolute inset-0 w-full h-full object-cover opacity-60">
-                        <div class="relative z-10 flex flex-col justify-end h-full p-6 lg:p-8 text-white">
+                        <div class="relative z-10 flex flex-col justify-end h-full p-6 text-white">
                             <div class="flex space-x-2 mb-2">
                                 <span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">10 min</span>
                                 <span class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 backdrop-blur-sm py-1 px-3 rounded-full">Velocidad</span>
                             </div>
-                            <h3 class="font-black text-4xl lg:text-5xl tracking-tighter">Furia de Golpes</h3>
+                            <h3 class="font-black text-4xl tracking-tighter">Furia de Golpes</h3>
                             <p class="text-sm text-gray-300 max-w-xs mt-1">Un desafío de alta intensidad para tu velocidad y precisión.</p>
                             <button class="mt-5 flex items-center space-x-2 text-md font-bold btn-primary px-6 py-3 rounded-xl w-fit">
                                 <span>Comenzar Ahora</span>
@@ -178,7 +157,7 @@
                 <!-- Sección de Combos Destacados -->
                 <div id="combos">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl lg:text-3xl font-extrabold text-white tracking-tight">Combos Destacados</h2>
+                        <h2 class="text-2xl font-extrabold text-white tracking-tight">Combos Destacados</h2>
                         <button id="openComboGenerator" class="flex items-center space-x-2 text-sm font-semibold bg-red-500/20 text-red-400 px-4 py-2 rounded-lg hover:bg-red-500/30 transition-colors">
                             <span>✨ Crear Combo</span>
                         </button>
@@ -192,8 +171,8 @@
 
                 <!-- Sección de Lecciones Fundamentales -->
                 <div>
-                    <h2 class="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">Aprende lo Esencial</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <h2 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Aprende lo Esencial</h2>
+                    <div class="grid grid-cols-2 gap-4">
                         <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/66ZThvH8/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.png" alt="Jab" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Jab</h3></div></div>
                         <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/x8LCjwkv/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-6.png" alt="Cruzado" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Cruzado</h3></div></div>
                         <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/632qg2t1/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-8.png" alt="Gancho" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Gancho</h3></div></div>
@@ -205,7 +184,7 @@
 
                 <!-- Analizador de Técnica con IA -->
                 <div id="analisis-ia">
-                    <h2 class="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">✨ Analiza tu Técnica con IA</h2>
+                    <h2 class="text-2xl font-extrabold text-white mb-4 tracking-tight">✨ Analiza tu Técnica con IA</h2>
                     <div class="card rounded-2xl p-6">
                         <div class="flex items-center mb-4">
                             <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/30">
@@ -217,7 +196,7 @@
                             </div>
                         </div>
                         <textarea id="techniqueInput" class="w-full bg-black/30 rounded-lg p-3 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 focus:outline-none transition-colors" rows="3" placeholder="Ej: Mi cruzado de derecha se siente débil y me desequilibra..."></textarea>
-                        <button id="analyzeTechniqueBtn" class="mt-4 flex items-center space-x-2 text-md font-bold btn-secondary-glow px-6 py-3 rounded-xl w-full lg:w-auto">
+                        <button id="analyzeTechniqueBtn" class="mt-4 flex items-center space-x-2 text-md font-bold btn-secondary-glow px-6 py-3 rounded-xl w-full">
                             <span>Obtener Consejos</span>
                         </button>
                         <div id="techniqueResponse" class="gemini-response hidden"></div>
@@ -226,7 +205,7 @@
 
                 <!-- Imita a las Leyendas -->
                 <div id="leyendas">
-                    <h2 class="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">Explora Leyendas</h2>
+                    <h2 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Explora Leyendas</h2>
                     <div class="flex space-x-4 overflow-x-auto no-scrollbar pb-4">
                         <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Tyson" alt="Imagen de Mike Tyson" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Mike Tyson</h3><p class="text-sm text-gray-400">Peek-a-Boo</p></div>
                         <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Ali" alt="Imagen de Muhammad Ali" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Muhammad Ali</h3><p class="text-sm text-gray-400">Flota y Pica</p></div>
@@ -361,6 +340,30 @@
 
                 comboResponseDiv.textContent = response;
                 generateComboBtn.disabled = false;
+            });
+
+            // --- Lógica de Navegación Móvil ---
+            const navLinks = document.querySelectorAll('.mobile-nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    // Prevenir el salto de anclaje
+                    e.preventDefault(); 
+                    
+                    // Quitar 'active' de todos
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    
+                    // Añadir 'active' al clickeado
+                    link.classList.add('active');
+                    
+                    // Desplazarse a la sección (si tiene un anclaje)
+                    const targetId = link.getAttribute('href');
+                    if (targetId.startsWith('#')) {
+                        const targetElement = document.getElementById(targetId.substring(1));
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                });
             });
         });
     </script>
