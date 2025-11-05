@@ -140,14 +140,8 @@
                     </div>
                 </div>
 
-                <!-- Barra de Búsqueda -->
-                <div class="relative">
-                    <input type="text" placeholder="Buscar rutinas o ejercicios..." class="w-full bg-gray-800/80 border border-gray-700 rounded-full py-3 px-5 pl-12 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <ion-icon name="search-outline" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl"></ion-icon>
-                </div>
-
                 <!-- Menú de Pestañas -->
-                <nav class="flex space-x-6 overflow-x-auto no-scrollbar border-b border-gray-700/60">
+                <nav id="tab-navigation" class="flex space-x-6 overflow-x-auto no-scrollbar border-b border-gray-700/60">
                     <button class="tab-button active" data-target="content-combos">Combos</button>
                     <button class="tab-button" data-target="content-lecciones">Lecciones</button>
                     <button class="tab-button" data-target="content-leyendas">Leyendas</button>
@@ -206,7 +200,7 @@
                         </div>
                          <div class="card rounded-2xl p-4 flex items-center space-x-4">
                             <div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
-                                <img src="https://i.postimg.cc/FR6nyzTg/Gemini-Generated-Image-vwh4khvwh4khvwh4.png" alt="Rutina de técnica" class="w-full h-full object-cover">
+                                <img src="https://i.postimg.cc/FR6nyzTg/Gemini-Generated_Image-vwh4khvwh4khvwh4.png" alt="Rutina de técnica" class="w-full h-full object-cover">
                             </div>
                             <div>
                                 <span class="text-xs text-blue-400 font-semibold">Técnica</span>
@@ -220,11 +214,10 @@
                     <div id="content-lecciones" class="space-y-4 hidden">
                         <h2 class="text-xl font-bold text-white">Aprende lo Esencial</h2>
                         <div class="grid grid-cols-2 gap-4">
-                            <!-- **FIX:** Added `relative` class to each card -->
                             <div class="card relative rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/66ZThvH8/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Jab</h3></div>
                             <div class="card relative rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/x8LCjwkv/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-6.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Cruzado</h3></div>
                             <div class="card relative rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/632qg2t1/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-8.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Gancho</h3></div>
-                            <div class="card relative rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/gkqJCPbd/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Uppercut</h3></div>
+                            <div class="card relative rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="httpsJ://i.postimg.cc/gkqJCPbd/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Uppercut</h3></div>
                             <div class="card relative rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/6pW3w1BZ/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-3.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Bloqueo</h3></div>
                             <div class="card relative rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/63kqXWQ6/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-7.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Esquivar</h3></div>
                         </div>
@@ -282,7 +275,7 @@
             <ion-icon name="home" class="text-2xl"></ion-icon>
             <span class="text-xs font-bold">Inicio</span>
         </a>
-        <a href="#combos" class="mobile-nav-link flex flex-col items-center p-2">
+        <a href="#content-combos" class="mobile-nav-link flex flex-col items-center p-2">
             <ion-icon name="flash" class="text-2xl"></ion-icon>
             <span class="text-xs font-bold">Combos</span>
         </a>
@@ -290,13 +283,9 @@
             <ion-icon name="sparkles" class="text-2xl"></ion-icon>
             <span class="text-xs font-bold">Análisis IA</span>
         </a>
-         <a href="#leyendas" class="mobile-nav-link flex flex-col items-center p-2">
+         <a href="#content-leyendas" class="mobile-nav-link flex flex-col items-center p-2">
             <ion-icon name="star" class="text-2xl"></ion-icon>
             <span class="text-xs font-bold">Leyendas</span>
-        </a>
-        <a href="#" class="mobile-nav-link flex flex-col items-center p-2">
-            <ion-icon name="person" class="text-2xl"></ion-icon>
-            <span class="text-xs font-bold">Perfil</span>
         </a>
     </nav>
 
@@ -398,16 +387,26 @@
             // --- Lógica de Pestañas Superiores ---
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('#tab-content > div');
+            
+            function switchTab(targetId) {
+                // Desactivar todos los botones y contenidos
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.add('hidden'));
+
+                // Activar el botón y contenido correctos
+                const correspondingButton = document.querySelector(`.tab-button[data-target="${targetId}"]`);
+                if (correspondingButton) {
+                    correspondingButton.classList.add('active');
+                }
+                const correspondingContent = document.getElementById(targetId);
+                if (correspondingContent) {
+                    correspondingContent.classList.remove('hidden');
+                }
+            }
 
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    // Desactivar todos
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.add('hidden'));
-                    
-                    // Activar el seleccionado
-                    button.classList.add('active');
-                    document.getElementById(button.dataset.target).classList.remove('hidden');
+                    switchTab(button.dataset.target);
                 });
             });
 
@@ -419,13 +418,25 @@
                     navLinks.forEach(nav => nav.classList.remove('active'));
                     link.classList.add('active');
                     
-                    const targetId = link.getAttribute('href');
-                    if (targetId.startsWith('#')) {
-                        const targetElement = document.getElementById(targetId.substring(1));
+                    const targetId = link.getAttribute('href'); // e.g., "#content-combos", "#analisis-ia", "#"
+
+                    if (targetId === '#') {
+                         window.scrollTo({ top: 0, behavior: "smooth" });
+                         switchTab('content-combos'); // Reset to default tab
+                    } else {
+                        const targetElement = document.getElementById(targetId.substring(1)); // Get element by ID
                         if (targetElement) {
-                            // Ajustar el scroll para que el header no tape el título
+                            
+                            // Si el elemento es un tab, cambiar a ese tab
+                            if (targetElement.parentElement.id === 'tab-content') {
+                                switchTab(targetElement.id);
+                            }
+                            
+                            // Scroll to the element (or its parent container if it's a tab)
+                            const scrollTarget = (targetElement.parentElement.id === 'tab-content') ? document.getElementById('tab-navigation') : targetElement;
+                            
                             const headerOffset = 80; 
-                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const elementPosition = scrollTarget.getBoundingClientRect().top;
                             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                   
                             window.scrollTo({
@@ -433,8 +444,6 @@
                                  behavior: "smooth"
                             });
                         }
-                    } else {
-                         window.scrollTo({ top: 0, behavior: "smooth" });
                     }
                 });
             });
