@@ -16,12 +16,14 @@
     <!-- Estilos personalizados y configuración de Tailwind -->
     <style>
         :root {
-            --bg-main: #0A0A0A;
-            --bg-card: rgba(28, 28, 30, 0.7);
+            --bg-main: #111217; /* Fondo principal (azul muy oscuro) */
+            --bg-card: #1E1F24; /* Fondo de tarjetas (gris azulado) */
             --text-primary: #F2F2F7;
             --text-secondary: #8A8A8E;
-            --accent-red: #FF3B30;
+            --accent-main: #6366F1; /* Acento principal (Índigo) */
+            --accent-secondary: #FF3B30; /* Acento para IA (Rojo) */
             --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(99, 102, 241, 0.5);
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -29,99 +31,152 @@
             color: var(--text-primary);
         }
         .main-container-mobile {
-            padding-bottom: 100px; /* Espacio para la barra de navegación inferior móvil */
+            padding-bottom: 100px;
         }
         .card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--border-hover);
         }
+        /* Botón brillante principal (Índigo) */
         .btn-primary {
-            background: var(--accent-red);
+            background: var(--accent-main);
             color: white;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.2);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
         }
         .btn-primary:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 59, 48, 0.4);
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.8);
         }
+         /* Botón brillante secundario (Rojo para IA) */
+        .btn-secondary-glow {
+            background: var(--accent-secondary);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 59, 48, 0.5);
+        }
+        .btn-secondary-glow:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 59, 48, 0.8);
+        }
+
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .image-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent 60%);
+        .image-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
             border-radius: 1rem;
-            transition: background 0.3s ease;
         }
-        .header-overlay::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(10, 10, 10, 0.6) 0%, rgba(10, 10, 10, 0.3) 50%, #0A0A0A 95%);
+        .image-card img {
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
+        .image-card-overlay {
+            background: rgba(0, 0, 0, 0.4);
+            transition: background 0.3s ease;
         }
         .gemini-response {
             white-space: pre-wrap;
             background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
             border-radius: 0.75rem;
             padding: 1rem;
             margin-top: 1rem;
         }
+        .legend-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
+            border-radius: 1.5rem;
+        }
+
+        /* Animación Menú Escritorio */
+        .desktop-nav-link {
+            position: relative;
+            padding-bottom: 8px;
+        }
+        .desktop-nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 0;
+            background-color: var(--accent-main);
+            transition: width 0.3s ease;
+        }
+        .desktop-nav-link:hover::after,
+        .desktop-nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Animación Menú Móvil */
+        .mobile-nav-link {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .mobile-nav-link.active {
+            color: var(--accent-main);
+            transform: scale(1.1) translateY(-4px);
+        }
+
     </style>
 </head>
 <body class="antialiased">
 
     <div class="main-container-mobile lg:main-container-desktop">
-        <!-- Header Hero -->
-        <div class="relative overflow-hidden">
-            <div class="absolute inset-0">
-                <img src="https://i.postimg.cc/43B03Bt0/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.jpg" alt="Boxeador entrenando" class="w-full h-full object-cover">
+        <!-- Cabecera -->
+        <header class="sticky top-0 z-20 p-6 bg-black/50 backdrop-blur-xl border-b border-white/5">
+            <div class="flex justify-between items-center max-w-7xl mx-auto">
+                <h1 class="text-2xl font-black text-white">Boxeo <span class="text-indigo-400">Pro</span></h1>
+                
+                <!-- Navegación de Escritorio -->
+                <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
+                    <a href="#" class="desktop-nav-link active text-indigo-400">Inicio</a>
+                    <a href="#combos" class="desktop-nav-link text-gray-300 hover:text-white">Combos</a>
+                    <a href="#analisis-ia" class="desktop-nav-link text-gray-300 hover:text-white">Análisis IA</a>
+                    <a href="#leyendas" class="desktop-nav-link text-gray-300 hover:text-white">Leyendas</a>
+                    <a href="#" class="desktop-nav-link text-gray-300 hover:text-white">Perfil</a>
+                </nav>
             </div>
-            <div class="header-overlay">
-                <div class="relative max-w-7xl mx-auto">
-                    <!-- Cabecera -->
-                    <header class="p-6 z-20">
-                        <div class="flex justify-between items-center">
-                            <h1 class="text-2xl font-black text-white">Boxeo <span class="text-red-500">Pro</span></h1>
-                            
-                            <!-- Navegación de Escritorio -->
-                            <nav class="hidden lg:flex items-center space-x-8 text-sm font-semibold">
-                                <a href="#" class="text-red-400">Inicio</a>
-                                <a href="#" class="text-gray-300 hover:text-white transition-colors">Combos</a>
-                                <a href="#" class="text-gray-300 hover:text-white transition-colors">Leyendas</a>
-                                <a href="#" class="text-gray-300 hover:text-white transition-colors">Progreso</a>
-                            </nav>
-                        </div>
-                    </header>
-
-                    <!-- Contenido del Hero -->
-                    <div class="relative px-6 py-20 lg:py-28 text-center lg:text-left">
-                        <h2 class="text-4xl lg:text-6xl font-black text-white tracking-tighter max-w-2xl mx-auto lg:mx-0">Conviértete en Imparable</h2>
-                        <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto lg:mx-0">Domina el arte del boxeo con rutinas diseñadas por profesionales y la ayuda de IA.</p>
-                        <button class="mt-8 flex items-center space-x-2 text-md font-bold btn-primary px-6 py-3 rounded-xl mx-auto lg:mx-0">
-                            <span>Empezar mi primer combo</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </header>
 
         <div class="max-w-7xl mx-auto">
             <!-- Contenido principal -->
             <main class="space-y-16 mt-8 px-6">
                 
-                <!-- Sección de Combos Destacados -->
+                <!-- Sección "Hoy para ti" -->
                 <div>
+                    <h2 class="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">Hoy para ti</h2>
+                    <div class="card rounded-3xl overflow-hidden relative aspect-video lg:aspect-[2.5/1]">
+                        <img src="https://i.postimg.cc/43B03Bt0/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.jpg" alt="Rutina de combo de velocidad" class="absolute inset-0 w-full h-full object-cover opacity-60">
+                        <div class="relative z-10 flex flex-col justify-end h-full p-6 lg:p-8 text-white">
+                            <div class="flex space-x-2 mb-2">
+                                <span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">10 min</span>
+                                <span class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 backdrop-blur-sm py-1 px-3 rounded-full">Velocidad</span>
+                            </div>
+                            <h3 class="font-black text-4xl lg:text-5xl tracking-tighter">Furia de Golpes</h3>
+                            <p class="text-sm text-gray-300 max-w-xs mt-1">Un desafío de alta intensidad para tu velocidad y precisión.</p>
+                            <button class="mt-5 flex items-center space-x-2 text-md font-bold btn-primary px-6 py-3 rounded-xl w-fit">
+                                <span>Comenzar Ahora</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección de Combos Destacados -->
+                <div id="combos">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl lg:text-3xl font-extrabold text-white tracking-tight">Combos Destacados</h2>
                         <button id="openComboGenerator" class="flex items-center space-x-2 text-sm font-semibold bg-red-500/20 text-red-400 px-4 py-2 rounded-lg hover:bg-red-500/30 transition-colors">
@@ -129,9 +184,9 @@
                         </button>
                     </div>
                      <div class="flex space-x-4 overflow-x-auto no-scrollbar pb-4" style="scroll-snap-type: x mandatory;">
-                        <div class="flex-shrink-0 w-80 rounded-3xl overflow-hidden relative card aspect-[4/5]" style="scroll-snap-align: start;"><img src="https://i.postimg.cc/vZ7jJQmb/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.jpg" alt="Rutina de fuerza" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div><div class="relative z-10 flex flex-col justify-end h-full p-6 text-white"><div class="flex space-x-2 mb-2"><span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">20 min</span><span class="text-xs font-semibold bg-red-500/20 text-red-400 backdrop-blur-sm py-1 px-3 rounded-full">Potencia</span></div><h3 class="font-black text-2xl tracking-tight">Impacto de Acero</h3></div></div>
-                        <div class="flex-shrink-0 w-80 rounded-3xl overflow-hidden relative card aspect-[4/5]" style="scroll-snap-align: start;"><img src="https://i.postimg.cc/T3vFNyft/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-3.jpg" alt="Rutina de resistencia" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div><div class="relative z-10 flex flex-col justify-end h-full p-6 text-white"><div class="flex space-x-2 mb-2"><span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">30 min</span><span class="text-xs font-semibold bg-red-500/20 text-red-400 backdrop-blur-sm py-1 px-3 rounded-full">Resistencia</span></div><h3 class="font-black text-2xl tracking-tight">Corazón de León</h3></div></div>
-                        <div class="flex-shrink-0 w-80 rounded-3xl overflow-hidden relative card aspect-[4/5]" style="scroll-snap-align: start;"><img src="https://i.postimg.cc/cJsjZVKY/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-2.jpg" alt="Rutina de defensa" class="absolute inset-0 w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div><div class="relative z-10 flex flex-col justify-end h-full p-6 text-white"><div class="flex space-x-2 mb-2"><span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">15 min</span><span class="text-xs font-semibold bg-red-500/20 text-red-400 backdrop-blur-sm py-1 px-3 rounded-full">Defensa</span></div><h3 class="font-black text-2xl tracking-tight">Guardia de Hierro</h3></div></div>
+                        <div class="flex-shrink-0 w-80 rounded-3xl overflow-hidden relative card aspect-[4/5] legend-card" style="scroll-snap-align: start;"><img src="https://i.postimg.cc/vZ7jJQmb/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.jpg" alt="Rutina de fuerza" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col justify-end h-full p-6 text-white"><div class="flex space-x-2 mb-2"><span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">20 min</span><span class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 backdrop-blur-sm py-1 px-3 rounded-full">Potencia</span></div><h3 class="font-black text-2xl tracking-tight">Impacto de Acero</h3></div></div>
+                        <div class="flex-shrink-0 w-80 rounded-3xl overflow-hidden relative card aspect-[4/5] legend-card" style="scroll-snap-align: start;"><img src="https://i.postimg.cc/T3vFNyft/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-3.jpg" alt="Rutina de resistencia" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col justify-end h-full p-6 text-white"><div class="flex space-x-2 mb-2"><span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">30 min</span><span class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 backdrop-blur-sm py-1 px-3 rounded-full">Resistencia</span></div><h3 class="font-black text-2xl tracking-tight">Corazón de León</h3></div></div>
+                        <div class="flex-shrink-0 w-80 rounded-3xl overflow-hidden relative card aspect-[4/5] legend-card" style="scroll-snap-align: start;"><img src="https://i.postimg.cc/cJsjZVKY/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-2.jpg" alt="Rutina de defensa" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col justify-end h-full p-6 text-white"><div class="flex space-x-2 mb-2"><span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">15 min</span><span class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 backdrop-blur-sm py-1 px-3 rounded-full">Defensa</span></div><h3 class="font-black text-2xl tracking-tight">Guardia de Hierro</h3></div></div>
                     </div>
                 </div>
 
@@ -139,22 +194,30 @@
                 <div>
                     <h2 class="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">Aprende lo Esencial</h2>
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                        <div class="relative overflow-hidden rounded-2xl aspect-square text-center shadow-lg transform hover:-translate-y-1 transition-transform duration-300 image-card"><img src="https://i.postimg.cc/66ZThvH8/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.png" alt="Imagen de un jab de boxeo" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col items-start justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Jab</h3></div></div>
-                        <div class="relative overflow-hidden rounded-2xl aspect-square text-center shadow-lg transform hover:-translate-y-1 transition-transform duration-300 image-card"><img src="https://i.postimg.cc/x8LCjwkv/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-6.png" alt="Imagen de un golpe cruzado de boxeo" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col items-start justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Cruzado</h3></div></div>
-                        <div class="relative overflow-hidden rounded-2xl aspect-square text-center shadow-lg transform hover:-translate-y-1 transition-transform duration-300 image-card"><img src="https://i.postimg.cc/632qg2t1/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-8.png" alt="Imagen de un gancho de boxeo" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col items-start justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Gancho</h3></div></div>
-                        <div class="relative overflow-hidden rounded-2xl aspect-square text-center shadow-lg transform hover:-translate-y-1 transition-transform duration-300 image-card"><img src="https://i.postimg.cc/gkqJCPbd/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.png" alt="Imagen de un uppercut de boxeo" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col items-start justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Uppercut</h3></div></div>
-                        <div class="relative overflow-hidden rounded-2xl aspect-square text-center shadow-lg transform hover:-translate-y-1 transition-transform duration-300 image-card"><img src="https://i.postimg.cc/6pW3w1BZ/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-3.png" alt="Imagen de un bloqueo de boxeo" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col items-start justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Bloqueo</h3></div></div>
-                        <div class="relative overflow-hidden rounded-2xl aspect-square text-center shadow-lg transform hover:-translate-y-1 transition-transform duration-300 image-card"><img src="https://i.postimg.cc/63kqXWQ6/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-7.png" alt="Imagen de un esquivar de boxeo" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col items-start justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Esquivar</h3></div></div>
+                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/66ZThvH8/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.png" alt="Jab" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Jab</h3></div></div>
+                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/x8LCjwkv/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-6.png" alt="Cruzado" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Cruzado</h3></div></div>
+                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/632qg2t1/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-8.png" alt="Gancho" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Gancho</h3></div></div>
+                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/gkqJCPbd/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.png" alt="Uppercut" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Uppercut</h3></div></div>
+                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/6pW3w1BZ/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-3.png" alt="Bloqueo" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Bloqueo</h3></div></div>
+                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/63kqXWQ6/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-7.png" alt="Esquivar" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Esquivar</h3></div></div>
                     </div>
                 </div>
 
                 <!-- Analizador de Técnica con IA -->
-                <div>
+                <div id="analisis-ia">
                     <h2 class="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">✨ Analiza tu Técnica con IA</h2>
                     <div class="card rounded-2xl p-6">
-                        <p class="text-gray-400 mb-4">¿Sientes que a tu gancho le falta potencia o que tu jab es muy lento? Describe tu problema y nuestro entrenador IA te dará 3 consejos clave para mejorar.</p>
-                        <textarea id="techniqueInput" class="w-full bg-gray-900/50 rounded-lg p-3 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 focus:outline-none transition-colors" rows="3" placeholder="Ej: Mi cruzado de derecha se siente débil y me desequilibra..."></textarea>
-                        <button id="analyzeTechniqueBtn" class="mt-4 flex items-center space-x-2 text-md font-bold btn-primary px-6 py-3 rounded-xl w-full lg:w-auto">
+                        <div class="flex items-center mb-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/30">
+                                <svg class="w-6 h-6 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.456-2.456L12.5 18l1.178-.398a3.375 3.375 0 002.456-2.456L16.5 14.25l.398 1.178a3.375 3.375 0 002.456 2.456L20.25 18l-1.178.398a3.375 3.375 0 00-2.456 2.456z" /></svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-white">Entrenador Virtual</h3>
+                                <p class="text-gray-400 text-sm">Describe tu problema y recibe consejos.</p>
+                            </div>
+                        </div>
+                        <textarea id="techniqueInput" class="w-full bg-black/30 rounded-lg p-3 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 focus:outline-none transition-colors" rows="3" placeholder="Ej: Mi cruzado de derecha se siente débil y me desequilibra..."></textarea>
+                        <button id="analyzeTechniqueBtn" class="mt-4 flex items-center space-x-2 text-md font-bold btn-secondary-glow px-6 py-3 rounded-xl w-full lg:w-auto">
                             <span>Obtener Consejos</span>
                         </button>
                         <div id="techniqueResponse" class="gemini-response hidden"></div>
@@ -162,13 +225,13 @@
                 </div>
 
                 <!-- Imita a las Leyendas -->
-                <div>
+                <div id="leyendas">
                     <h2 class="text-2xl lg:text-3xl font-extrabold text-white mb-4 tracking-tight">Explora Leyendas</h2>
                     <div class="flex space-x-4 overflow-x-auto no-scrollbar pb-4">
-                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/161616/ffffff?text=Tyson" alt="Imagen de Mike Tyson" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Mike Tyson</h3><p class="text-sm text-gray-400">Peek-a-Boo</p></div>
-                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/161616/ffffff?text=Ali" alt="Imagen de Muhammad Ali" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Muhammad Ali</h3><p class="text-sm text-gray-400">Flota y Pica</p></div>
-                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/161616/ffffff?text=Canelo" alt="Imagen de Canelo Álvarez" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Canelo Álvarez</h3><p class="text-sm text-gray-400">Contra-ataque</p></div>
-                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/161616/ffffff?text=Pac-Man" alt="Imagen de Manny Pacquiao" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Manny Pacquiao</h3><p class="text-sm text-gray-400">Volumen</p></div>
+                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Tyson" alt="Imagen de Mike Tyson" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Mike Tyson</h3><p class="text-sm text-gray-400">Peek-a-Boo</p></div>
+                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Ali" alt="Imagen de Muhammad Ali" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Muhammad Ali</h3><p class="text-sm text-gray-400">Flota y Pica</p></div>
+                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Canelo" alt="Imagen de Canelo Álvarez" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Canelo Álvarez</h3><p class="text-sm text-gray-400">Contra-ataque</p></div>
+                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Pac-Man" alt="Imagen de Manny Pacquiao" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Manny Pacquiao</h3><p class="text-sm text-gray-400">Volumen</p></div>
                     </div>
                 </div>
             </main>
@@ -177,19 +240,36 @@
 
     <!-- Barra de Navegación Inferior Móvil -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-black/80 backdrop-blur-lg border-t border-white/10 h-20 flex justify-around items-center z-20 lg:hidden">
-        <a href="#" class="flex flex-col items-center text-red-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span class="text-xs font-bold">Inicio</span></a>
-        <a href="#" class="flex flex-col items-center text-gray-400 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.2 2.2c-1.1.2-2 .8-2.7 1.7S6 5.6 6 6.8v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6c.3.2.5.3.7.4.2.1.4.2.6.2s.4-.1.6-.2c.2-.1.5-.3.7-.4c.8-.4 1.4-.9 1.8-1.6s.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9c-.3-.1-.6-.2-.9-.2s-.6.1-.9.2z"/><path d="M10.2 2.2c-1.1.2-2 .8-2.7 1.7S6 5.6 6 6.8v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6L12 14l3.2-2.8c.8-.4 1.4-.9 1.8-1.6.4-.7.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9l-.5-.2c-.3-.1-.6-.1-.9-.1s-.6 0-.9.1z"/><path d="M6.2 9.1c-1.1.2-2 .8-2.7 1.7S2 12.5 2 13.7v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6c.3.2.5.3.7.4.2.1.4.2.6.2s.4-.1.6-.2c.2-.1.5-.3.7-.4c.8-.4 1.4-.9 1.8-1.6.4-.7.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9c-.3-.1-.6-.2-.9-.2s-.6.1-.9.2z"/><path d="M14.2 9.1c-1.1.2-2 .8-2.7 1.7s-.7 2.1-.7 3.3v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6c.3.2.5.3.7.4.2.1.4.2.6.2s.4-.1.6-.2c.2-.1.5-.3.7-.4c.8-.4 1.4-.9 1.8-1.6.4-.7.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9c-.3-.1-.6-.2-.9-.2s-.6.1-.9.2z"/></svg><span class="text-xs font-bold">Entrenar</span></a>
-        <a href="#" class="flex flex-col items-center text-gray-400 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="text-xs font-bold">Progreso</span></a>
+        <a href="#" class="mobile-nav-link flex flex-col items-center text-gray-400 active">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span class="text-xs font-bold">Inicio</span>
+        </a>
+        <a href="#combos" class="mobile-nav-link flex flex-col items-center text-gray-400 hover:text-indigo-400">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.2 2.2c-1.1.2-2 .8-2.7 1.7S6 5.6 6 6.8v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6c.3.2.5.3.7.4.2.1.4.2.6.2s.4-.1.6-.2c.2-.1.5-.3.7-.4c.8-.4 1.4-.9 1.8-1.6s.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9c-.3-.1-.6-.2-.9-.2s-.6.1-.9.2z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10.2 2.2c-1.1.2-2 .8-2.7 1.7S6 5.6 6 6.8v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6L12 14l3.2-2.8c.8-.4 1.4-.9 1.8-1.6.4-.7.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9l-.5-.2c-.3-.1-.6-.1-.9-.1s-.6 0-.9.1zM6.2 9.1c-1.1.2-2 .8-2.7 1.7S2 12.5 2 13.7v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6c.3.2.5.3.7.4.2.1.4.2.6.2s.4-.1.6-.2c.2-.1.5-.3.7-.4c.8-.4 1.4-.9 1.8-1.6.4-.7.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9c-.3-.1-.6-.2-.9-.2s-.6.1-.9.2zM14.2 9.1c-1.1.2-2 .8-2.7 1.7s-.7 2.1-.7 3.3v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6c.3.2.5.3.7.4.2.1.4.2.6.2s.4-.1.6-.2c.2-.1.5-.3.7-.4c.8-.4 1.4-.9 1.8-1.6.4-.7.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9c-.3-.1-.6-.2-.9-.2s-.6.1-.9.2z" /></svg>
+            <span class="text-xs font-bold">Combos</span>
+        </a>
+        <a href="#analisis-ia" class="mobile-nav-link flex flex-col items-center text-gray-400 hover:text-indigo-400">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" /></svg>
+            <span class="text-xs font-bold">Análisis IA</span>
+        </a>
+         <a href="#leyendas" class="mobile-nav-link flex flex-col items-center text-gray-400 hover:text-indigo-400">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.31h5.4c.495 0 .71.659.34 1.004l-4.36 3.185a.563.563 0 00-.22.518l1.64 5.33c.194.631-.526 1.18-1.04 1.004L12.44 16.65a.563.563 0 00-.515 0l-4.42 3.185c-.513.176-1.235-.373-1.04-1.004l1.64-5.33a.563.563 0 00-.22-.518L2.64 9.924c-.37-.345-.155-1.004.34-1.004h5.4a.563.563 0 00.475-.31l2.125-5.112z" /></svg>
+            <span class="text-xs font-bold">Leyendas</span>
+        </a>
+        <a href="#" class="mobile-nav-link flex flex-col items-center text-gray-400 hover:text-indigo-400">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A1.875 1.875 0 0118 22.5H6A1.875 1.875 0 014.501 20.118z" /></svg>
+            <span class="text-xs font-bold">Perfil</span>
+        </a>
     </nav>
 
     <!-- Modal para Generador de Combos -->
-    <div id="comboGeneratorModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden items-center justify-center p-4">
+    <div id="comboGeneratorModal" class="fixed inset-0 bg-black/50 backdrop-blur-lg z-50 hidden items-center justify-center p-4">
         <div class="card rounded-2xl w-full max-w-md p-6 relative">
             <button id="closeComboModal" class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl font-bold">&times;</button>
             <h3 class="text-xl font-bold mb-4">✨ Generador de Combos con IA</h3>
             <p class="text-gray-400 mb-4">Describe tu objetivo y la IA creará 3 combos únicos para ti.</p>
-            <input id="comboGoalInput" type="text" class="w-full bg-gray-900/50 rounded-lg p-3 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 focus:outline-none transition-colors" placeholder="Ej: combos rápidos para empezar un ataque">
-            <button id="generateComboBtn" class="mt-4 flex items-center justify-center space-x-2 text-md font-bold btn-primary px-6 py-3 rounded-xl w-full">
+            <input id="comboGoalInput" type="text" class="w-full bg-black/30 rounded-lg p-3 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 focus:outline-none transition-colors" placeholder="Ej: combos rápidos para empezar un ataque">
+            <button id="generateComboBtn" class="mt-4 flex items-center justify-center space-x-2 text-md font-bold btn-secondary-glow px-6 py-3 rounded-xl w-full">
                 <span>Generar</span>
             </button>
             <div id="comboResponse" class="gemini-response hidden"></div>
