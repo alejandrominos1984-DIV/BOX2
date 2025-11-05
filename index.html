@@ -13,28 +13,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Librería de Iconos (para los iconos de la app) -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    
     <!-- Estilos personalizados y configuración de Tailwind -->
     <style>
         :root {
-            /* Nuevo fondo degradado */
-            --bg-gradient-start: #3a0015; /* Rojo oscuro */
-            --bg-gradient-end: #001a40;   /* Azul oscuro */
-            
-            --bg-card: rgba(28, 28, 30, 0.75); /* Tarjeta translúcida */
+            --bg-main: #161618;
+            --bg-card: #1E1F24;
             --text-primary: #F2F2F7;
             --text-secondary: #8A8A8E;
-            --accent-main: #6366F1; /* Acento principal (Índigo) */
-            --accent-secondary: #FF3B30; /* Acento para IA (Rojo) */
+            --accent-blue: #3B82F6; /* Azul de acento */
+            --accent-yellow: #FBBF24; /* Amarillo para destacar */
+            --accent-red-ia: #FF3B30; /* Rojo para IA */
             --border-color: rgba(255, 255, 255, 0.1);
-            --border-hover: rgba(99, 102, 241, 0.5);
         }
         body {
             font-family: 'Inter', sans-serif;
-            /* Aplicando el nuevo fondo degradado */
-            background-color: var(--bg-gradient-end);
-            background-image: linear-gradient(160deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            background-color: var(--bg-main);
             color: var(--text-primary);
-            background-attachment: fixed;
         }
         .main-container-mobile {
             padding-bottom: 100px;
@@ -42,30 +40,25 @@
         .card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border-color: var(--border-hover);
         }
-        /* Botón brillante principal (Índigo) */
         .btn-primary {
-            background: var(--accent-main);
+            background: var(--accent-blue);
             color: white;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
         }
         .btn-primary:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.8);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.8);
         }
-         /* Botón brillante secundario (Rojo para IA) */
         .btn-secondary-glow {
-            background: var(--accent-secondary);
+            background: var(--accent-red-ia);
             color: white;
             font-weight: 600;
             transition: all 0.3s ease;
@@ -75,25 +68,9 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(255, 59, 48, 0.8);
         }
-
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .image-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-            border-radius: 1rem;
-        }
-        .image-card img {
-            transition: transform 0.3s ease, filter 0.3s ease;
-        }
-        .image-card:hover img {
-            transform: scale(1.05);
-        }
-        .image-card-overlay {
-            background: rgba(0, 0, 0, 0.4);
-            transition: background 0.3s ease;
-        }
         .gemini-response {
             white-space: pre-wrap;
             background-color: rgba(255, 255, 255, 0.05);
@@ -102,115 +79,196 @@
             padding: 1rem;
             margin-top: 1rem;
         }
-        .legend-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
-            border-radius: 1.5rem;
-        }
 
-        /* Animación Menú Móvil */
+        /* Estilos de Pestañas */
+        .tab-button {
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            padding-bottom: 0.75rem;
+            padding-top: 0.75rem;
+            white-space: nowrap;
+        }
+        .tab-button.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+            font-weight: 600;
+        }
+        
+        /* Estilos Barra de Navegación Inferior */
         .mobile-nav-link {
-            transition: transform 0.3s ease, color 0.3s ease;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
         }
         .mobile-nav-link.active {
-            color: var(--accent-main);
+            color: var(--accent-blue);
             transform: scale(1.1) translateY(-4px);
         }
-
+        .mobile-nav-link.active ion-icon {
+            --ionicon-stroke-width: 48px;
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <div class="main-container-mobile">
+    <div class="main-container-mobile max-w-lg mx-auto">
         <!-- Cabecera -->
-        <header class="sticky top-0 z-20 p-6 bg-black/50 backdrop-blur-xl border-b border-white/5">
-            <div class="flex justify-between items-center max-w-lg mx-auto">
-                <h1 class="text-2xl font-black text-white">Boxeo <span class="text-indigo-400">Pro</span></h1>
+        <header class="p-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-black text-white">Hola, Campeón</h1>
+                    <p class="text-md text-gray-400">Listo para entrenar?</p>
+                </div>
+                <img src="https://placehold.co/48x48/1E1F24/ffffff?text=U" alt="Imagen de Perfil" class="w-12 h-12 rounded-full border-2 border-gray-700">
             </div>
         </header>
 
         <div class="max-w-lg mx-auto">
             <!-- Contenido principal -->
-            <main class="space-y-16 mt-8 px-6">
+            <main class="space-y-10 mt-4 px-6">
                 
-                <!-- Sección "Hoy para ti" -->
-                <div>
-                    <h2 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Hoy para ti</h2>
-                    <div class="card rounded-3xl overflow-hidden relative aspect-video">
-                        <img src="https://i.postimg.cc/43B03Bt0/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.jpg" alt="Rutina de combo de velocidad" class="absolute inset-0 w-full h-full object-cover opacity-60">
-                        <div class="relative z-10 flex flex-col justify-end h-full p-6 text-white">
-                            <div class="flex space-x-2 mb-2">
-                                <span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">10 min</span>
-                                <span class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 backdrop-blur-sm py-1 px-3 rounded-full">Velocidad</span>
-                            </div>
-                            <h3 class="font-black text-4xl tracking-tighter">Furia de Golpes</h3>
-                            <p class="text-sm text-gray-300 max-w-xs mt-1">Un desafío de alta intensidad para tu velocidad y precisión.</p>
-                            <button class="mt-5 flex items-center space-x-2 text-md font-bold btn-primary px-6 py-3 rounded-xl w-fit">
-                                <span>Comenzar Ahora</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Sección de Combos Destacados -->
-                <div id="combos">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-extrabold text-white tracking-tight">Combos Destacados</h2>
-                        <button id="openComboGenerator" class="flex items-center space-x-2 text-sm font-semibold bg-red-500/20 text-red-400 px-4 py-2 rounded-lg hover:bg-red-500/30 transition-colors">
-                            <span>✨ Crear Combo</span>
-                        </button>
-                    </div>
-                     <div class="flex space-x-4 overflow-x-auto no-scrollbar pb-4" style="scroll-snap-type: x mandatory;">
-                        <div class="flex-shrink-0 w-80 rounded-3xl overflow-hidden relative card aspect-[4/5] legend-card" style="scroll-snap-align: start;"><img src="https://i.postimg.cc/vZ7jJQmb/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.jpg" alt="Rutina de fuerza" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col justify-end h-full p-6 text-white"><div class="flex space-x-2 mb-2"><span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">20 min</span><span class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 backdrop-blur-sm py-1 px-3 rounded-full">Potencia</span></div><h3 class="font-black text-2xl tracking-tight">Impacto de Acero</h3></div></div>
-                        <div class="flex-shrink-0 w-80 rounded-3xl overflow-hidden relative card aspect-[4/5] legend-card" style="scroll-snap-align: start;"><img src="https://i.postimg.cc/T3vFNyft/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-3.jpg" alt="Rutina de resistencia" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col justify-end h-full p-6 text-white"><div class="flex space-x-2 mb-2"><span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">30 min</span><span class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 backdrop-blur-sm py-1 px-3 rounded-full">Resistencia</span></div><h3 class="font-black text-2xl tracking-tight">Corazón de León</h3></div></div>
-                        <div class="flex-shrink-0 w-80 rounded-3xl overflow-hidden relative card aspect-[4/5] legend-card" style="scroll-snap-align: start;"><img src="https://i.postimg.cc/cJsjZVKY/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-2.jpg" alt="Rutina de defensa" class="absolute inset-0 w-full h-full object-cover"><div class="relative z-10 flex flex-col justify-end h-full p-6 text-white"><div class="flex space-x-2 mb-2"><span class="text-xs font-semibold bg-white/10 backdrop-blur-sm py-1 px-3 rounded-full">15 min</span><span class="text-xs font-semibold bg-indigo-500/20 text-indigo-300 backdrop-blur-sm py-1 px-3 rounded-full">Defensa</span></div><h3 class="font-black text-2xl tracking-tight">Guardia de Hierro</h3></div></div>
+                <!-- Tarjeta Hero (Destacada) -->
+                <div class="rounded-2xl overflow-hidden relative aspect-video bg-amber-400">
+                    <!-- Filtro eliminado (opacity-80) -->
+                    <img src="https://i.postimg.cc/43B03Bt0/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.jpg" alt="Boxeador entrenando" class="absolute inset-0 w-full h-full object-cover">
+                    <!-- Overlay para legibilidad del texto -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                    <div class="relative z-10 p-6 flex flex-col justify-end h-full">
+                        <h3 class="text-white text-2xl font-bold">Reto de 30 Días</h3>
+                        <p class="text-white/90 text-sm mb-4">Comienza tu transformación hoy.</p>
+                        <button class="btn-primary rounded-full px-5 py-2 text-sm w-fit">Empezar Ahora</button>
                     </div>
                 </div>
 
-                <!-- Sección de Lecciones Fundamentales -->
-                <div>
-                    <h2 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Aprende lo Esencial</h2>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/66ZThvH8/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.png" alt="Jab" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Jab</h3></div></div>
-                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/x8LCjwkv/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-6.png" alt="Cruzado" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Cruzado</h3></div></div>
-                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/632qg2t1/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-8.png" alt="Gancho" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Gancho</h3></div></div>
-                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/gkqJCPbd/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.png" alt="Uppercut" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Uppercut</h3></div></div>
-                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/6pW3w1BZ/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-3.png" alt="Bloqueo" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Bloqueo</h3></div></div>
-                        <div class="image-card relative overflow-hidden rounded-2xl aspect-square shadow-lg transform hover:-translate-y-1"><img src="https://i.postimg.cc/63kqXWQ6/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-7.png" alt="Esquivar" class="absolute inset-0 w-full h-full object-cover"><div class="image-card-overlay absolute inset-0"></div><div class="relative z-10 flex flex-col justify-end h-full p-4"><h3 class="font-bold text-lg text-white">Esquivar</h3></div></div>
+                <!-- Barra de Búsqueda -->
+                <div class="relative">
+                    <input type="text" placeholder="Buscar rutinas o ejercicios..." class="w-full bg-gray-800/80 border border-gray-700 rounded-full py-3 px-5 pl-12 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <ion-icon name="search-outline" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl"></ion-icon>
+                </div>
+
+                <!-- Menú de Pestañas -->
+                <nav class="flex space-x-6 overflow-x-auto no-scrollbar border-b border-gray-700/60">
+                    <button class="tab-button active" data-target="content-combos">Combos</button>
+                    <button class="tab-button" data-target="content-lecciones">Lecciones</button>
+                    <button class="tab-button" data-target="content-leyendas">Leyendas</button>
+                </nav>
+
+                <!-- Contenido de Pestañas -->
+                <div id="tab-content">
+                    <!-- Contenido Combos -->
+                    <div id="content-combos" class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold text-white">Combos de Poder</h2>
+                            <button id="openComboGenerator" class="flex-shrink-0 flex items-center space-x-2 text-xs font-semibold bg-red-500/20 text-red-400 px-3 py-2 rounded-lg hover:bg-red-500/30 transition-colors">
+                                <ion-icon name="sparkles" class="text-base"></ion-icon>
+                                <span>Crear</span>
+                            </button>
+                        </div>
+                        <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                                <img src="https://i.postimg.cc/vZ7jJQmb/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.jpg" alt="Rutina de fuerza" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <span class="text-xs text-blue-400 font-semibold">Potencia</span>
+                                <h3 class="font-bold text-lg text-white">Impacto de Acero</h3>
+                                <p class="text-sm text-gray-400">20 min • 350 Kcal</p>
+                            </div>
+                        </div>
+                        <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                                <img src="https://i.postimg.cc/T3vFNyft/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-3.jpg" alt="Rutina de resistencia" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <span class="text-xs text-blue-400 font-semibold">Resistencia</span>
+                                <h3 class="font-bold text-lg text-white">Corazón de León</h3>
+                                <p class="text-sm text-gray-400">30 min • 500 Kcal</p>
+                            </div>
+                        </div>
+                        <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                                <img src="https://i.postimg.cc/cJsjZVKY/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-2.jpg" alt="Rutina de defensa" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <span class="text-xs text-blue-400 font-semibold">Defensa</span>
+                                <h3 class="font-bold text-lg text-white">Guardia de Hierro</h3>
+                                <p class="text-sm text-gray-400">15 min • 200 Kcal</p>
+                            </div>
+                        </div>
+                        <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                                <img src="https://i.postimg.cc/QtCyK1Jd/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-1.jpg" alt="Rutina de agilidad" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <span class="text-xs text-blue-400 font-semibold">Agilidad</span>
+                                <h3 class="font-bold text-lg text-white">Pies Ligeros</h3>
+                                <p class="text-sm text-gray-400">12 min • 180 Kcal</p>
+                            </div>
+                        </div>
+                         <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                                <img src="https://i.postimg.cc/FR6nyzTg/Gemini-Generated-Image-vwh4khvwh4khvwh4.png" alt="Rutina de técnica" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <span class="text-xs text-blue-400 font-semibold">Técnica</span>
+                                <h3 class="font-bold text-lg text-white">Sombra Fantasma</h3>
+                                <p class="text-sm text-gray-400">18 min • 250 Kcal</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenido Lecciones -->
+                    <div id="content-lecciones" class="space-y-4 hidden">
+                        <h2 class="text-xl font-bold text-white">Aprende lo Esencial</h2>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="card rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/66ZThvH8/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-5.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Jab</h3></div>
+                            <div class="card rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/x8LCjwkv/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-6.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Cruzado</h3></div>
+                            <div class="card rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/632qg2t1/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-8.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Gancho</h3></div>
+                            <div class="card rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/gkqJCPbd/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-4.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Uppercut</h3></div>
+                            <div class="card rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/6pW3w1BZ/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-3.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Bloqueo</h3></div>
+                            <div class="card rounded-2xl aspect-square flex flex-col justify-end p-4 overflow-hidden"><img src="https://i.postimg.cc/63kqXWQ6/Logo-para-Tienda-de-Ropa-Estilo-Grunge-Gris-Negro-Blanco-Turquesa-1200-x-400-px-7.png" class="absolute inset-0 w-full h-full object-cover opacity-70"><h3 class="font-bold text-lg text-white z-10">Esquivar</h3></div>
+                        </div>
+                    </div>
+
+                    <!-- Contenido Leyendas -->
+                    <div id="content-leyendas" class="space-y-4 hidden">
+                        <h2 class="text-xl font-bold text-white">Imita a las Leyendas</h2>
+                        <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <img src="https://placehold.co/80x80/1E1F24/ffffff?text=Tyson" alt="Mike Tyson" class="w-20 h-20 rounded-full object-cover flex-shrink-0">
+                            <div><h3 class="font-bold text-lg text-white">Mike Tyson</h3><p class="text-sm text-gray-400">Estilo Peek-a-Boo</p></div>
+                        </div>
+                        <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <img src="https://placehold.co/80x80/1E1F24/ffffff?text=Ali" alt="Muhammad Ali" class="w-20 h-20 rounded-full object-cover flex-shrink-0">
+                            <div><h3 class="font-bold text-lg text-white">Muhammad Ali</h3><p class="text-sm text-gray-400">Flota y Pica</p></div>
+                        </div>
+                        <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <img src="https://placehold.co/80x80/1E1F24/ffffff?text=Canelo" alt="Canelo Álvarez" class="w-20 h-20 rounded-full object-cover flex-shrink-0">
+                            <div><h3 class="font-bold text-lg text-white">Canelo Álvarez</h3><p class="text-sm text-gray-400">Contra-ataque</p></div>
+                        </div>
+                        <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <img src="https://placehold.co/80x80/1E1F24/ffffff?text=Pac-Man" alt="Manny Pacquiao" class="w-20 h-20 rounded-full object-cover flex-shrink-0">
+                            <div><h3 class="font-bold text-lg text-white">Manny Pacquiao</h3><p class="text-sm text-gray-400">Volumen y Ángulos</p></div>
+                        </div>
+                        <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <img src="https://placehold.co/80x80/1E1F24/ffffff?text=Money" alt="Floyd Mayweather" class="w-20 h-20 rounded-full object-cover flex-shrink-0">
+                            <div><h3 class="font-bold text-lg text-white">F. Mayweather Jr.</h3><p class="text-sm text-gray-400">Defensa y Hombro</p></div>
+                        </div>
+                         <div class="card rounded-2xl p-4 flex items-center space-x-4">
+                            <img src="https://placehold.co/80x80/1E1F24/ffffff?text=Rocky" alt="Rocky Marciano" class="w-20 h-20 rounded-full object-cover flex-shrink-0">
+                            <div><h3 class="font-bold text-lg text-white">Rocky Marciano</h3><p class="text-sm text-gray-400">Presión Implacable</p></div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Analizador de Técnica con IA -->
-                <div id="analisis-ia">
-                    <h2 class="text-2xl font-extrabold text-white mb-4 tracking-tight">✨ Analiza tu Técnica con IA</h2>
+                <div id="analisis-ia" class="pt-4">
+                    <h2 class="text-xl font-bold text-white mb-4 tracking-tight">✨ Analiza tu Técnica con IA</h2>
                     <div class="card rounded-2xl p-6">
-                        <div class="flex items-center mb-4">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/30">
-                                <svg class="w-6 h-6 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.456-2.456L12.5 18l1.178-.398a3.375 3.375 0 002.456-2.456L16.5 14.25l.398 1.178a3.375 3.375 0 002.456 2.456L20.25 18l-1.178.398a3.375 3.375 0 00-2.456 2.456z" /></svg>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-semibold text-white">Entrenador Virtual</h3>
-                                <p class="text-gray-400 text-sm">Describe tu problema y recibe consejos.</p>
-                            </div>
-                        </div>
-                        <textarea id="techniqueInput" class="w-full bg-black/30 rounded-lg p-3 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 focus:outline-none transition-colors" rows="3" placeholder="Ej: Mi cruzado de derecha se siente débil y me desequilibra..."></textarea>
-                        <button id="analyzeTechniqueBtn" class="mt-4 flex items-center space-x-2 text-md font-bold btn-secondary-glow px-6 py-3 rounded-xl w-full">
+                        <p class="text-gray-400 mb-4">¿Sientes que a tu gancho le falta potencia? Describe tu problema y nuestro entrenador IA te dará consejos.</p>
+                        <textarea id="techniqueInput" class="w-full bg-gray-900/50 rounded-lg p-3 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 focus:outline-none transition-colors" rows="3" placeholder="Ej: Mi cruzado de derecha se siente débil..."></textarea>
+                        <button id="analyzeTechniqueBtn" class="mt-4 flex items-center justify-center space-x-2 text-md font-bold btn-secondary-glow px-6 py-3 rounded-xl w-full">
                             <span>Obtener Consejos</span>
                         </button>
                         <div id="techniqueResponse" class="gemini-response hidden"></div>
-                    </div>
-                </div>
-
-                <!-- Imita a las Leyendas -->
-                <div id="leyendas">
-                    <h2 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Explora Leyendas</h2>
-                    <div class="flex space-x-4 overflow-x-auto no-scrollbar pb-4">
-                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Tyson" alt="Imagen de Mike Tyson" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Mike Tyson</h3><p class="text-sm text-gray-400">Peek-a-Boo</p></div>
-                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Ali" alt="Imagen de Muhammad Ali" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Muhammad Ali</h3><p class="text-sm text-gray-400">Flota y Pica</p></div>
-                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Canelo" alt="Imagen de Canelo Álvarez" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Canelo Álvarez</h3><p class="text-sm text-gray-400">Contra-ataque</p></div>
-                        <div class="flex-shrink-0 w-56 card rounded-2xl p-6 text-center flex flex-col items-center"><img src="https://placehold.co/150x150/1E1F24/ffffff?text=Pac-Man" alt="Imagen de Manny Pacquiao" class="w-24 h-24 rounded-full mb-3 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https:/\_placehold.co/150x150/ff0000/ffffff?text=Error';"><h3 class="font-bold text-lg text-white">Manny Pacquiao</h3><p class="text-sm text-gray-400">Volumen</p></div>
                     </div>
                 </div>
             </main>
@@ -218,25 +276,25 @@
     </div>
 
     <!-- Barra de Navegación Inferior Móvil -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-black/80 backdrop-blur-lg border-t border-white/10 h-20 flex justify-around items-center z-20 lg:hidden">
-        <a href="#" class="mobile-nav-link flex flex-col items-center text-gray-400 active">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-black/80 backdrop-blur-lg border-t border-white/10 h-20 flex justify-around items-center z-20">
+        <a href="#" class="mobile-nav-link flex flex-col items-center p-2 active">
+            <ion-icon name="home" class="text-2xl"></ion-icon>
             <span class="text-xs font-bold">Inicio</span>
         </a>
-        <a href="#combos" class="mobile-nav-link flex flex-col items-center text-gray-400 hover:text-indigo-400">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.2 2.2c-1.1.2-2 .8-2.7 1.7S6 5.6 6 6.8v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6c.3.2.5.3.7.4.2.1.4.2.6.2s.4-.1.6-.2c.2-.1.5-.3.7-.4c.8-.4 1.4-.9 1.8-1.6s.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9c-.3-.1-.6-.2-.9-.2s-.6.1-.9.2z" /><path stroke-linecap="round" stroke-linejoin="round" d="M10.2 2.2c-1.1.2-2 .8-2.7 1.7S6 5.6 6 6.8v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6L12 14l3.2-2.8c.8-.4 1.4-.9 1.8-1.6.4-.7.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9l-.5-.2c-.3-.1-.6-.1-.9-.1s-.6 0-.9.1zM6.2 9.1c-1.1.2-2 .8-2.7 1.7S2 12.5 2 13.7v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6c.3.2.5.3.7.4.2.1.4.2.6.2s.4-.1.6-.2c.2-.1.5-.3.7-.4c.8-.4 1.4-.9 1.8-1.6.4-.7.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9c-.3-.1-.6-.2-.9-.2s-.6.1-.9.2zM14.2 9.1c-1.1.2-2 .8-2.7 1.7s-.7 2.1-.7 3.3v.4c0 .9.2 1.7.6 2.4s1 1.2 1.8 1.6c.3.2.5.3.7.4.2.1.4.2.6.2s.4-.1.6-.2c.2-.1.5-.3.7-.4c.8-.4 1.4-.9 1.8-1.6.4-.7.6-1.5.6-2.4v-.4c0-1.2-.2-2.3-.7-3.2s-1.2-1.6-2-1.9c-.3-.1-.6-.2-.9-.2s-.6.1-.9.2z" /></svg>
+        <a href="#combos" class="mobile-nav-link flex flex-col items-center p-2">
+            <ion-icon name="flash" class="text-2xl"></ion-icon>
             <span class="text-xs font-bold">Combos</span>
         </a>
-        <a href="#analisis-ia" class="mobile-nav-link flex flex-col items-center text-gray-400 hover:text-indigo-400">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" /></svg>
+        <a href="#analisis-ia" class="mobile-nav-link flex flex-col items-center p-2">
+            <ion-icon name="sparkles" class="text-2xl"></ion-icon>
             <span class="text-xs font-bold">Análisis IA</span>
         </a>
-         <a href="#leyendas" class="mobile-nav-link flex flex-col items-center text-gray-400 hover:text-indigo-400">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.31h5.4c.495 0 .71.659.34 1.004l-4.36 3.185a.563.563 0 00-.22.518l1.64 5.33c.194.631-.526 1.18-1.04 1.004L12.44 16.65a.563.563 0 00-.515 0l-4.42 3.185c-.513.176-1.235-.373-1.04-1.004l1.64-5.33a.563.563 0 00-.22-.518L2.64 9.924c-.37-.345-.155-1.004.34-1.004h5.4a.563.563 0 00.475-.31l2.125-5.112z" /></svg>
+         <a href="#leyendas" class="mobile-nav-link flex flex-col items-center p-2">
+            <ion-icon name="star" class="text-2xl"></ion-icon>
             <span class="text-xs font-bold">Leyendas</span>
         </a>
-        <a href="#" class="mobile-nav-link flex flex-col items-center text-gray-400 hover:text-indigo-400">
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A1.875 1.875 0 0118 22.5H6A1.875 1.875 0 014.501 20.118z" /></svg>
+        <a href="#" class="mobile-nav-link flex flex-col items-center p-2">
+            <ion-icon name="person" class="text-2xl"></ion-icon>
             <span class="text-xs font-bold">Perfil</span>
         </a>
     </nav>
@@ -300,14 +358,11 @@
                     techniqueResponseDiv.classList.remove('hidden');
                     return;
                 }
-
                 techniqueResponseDiv.textContent = "Analizando...";
                 techniqueResponseDiv.classList.remove('hidden');
                 analyzeBtn.disabled = true;
-
                 const systemInstruction = "Eres un entrenador de boxeo de élite. Un estudiante describe un problema con su técnica. Proporciona 3 consejos prácticos, numerados y concisos para que pueda mejorar. Sé directo y motivador.";
                 const response = await callGemini(userInput, systemInstruction);
-                
                 techniqueResponseDiv.textContent = response;
                 analyzeBtn.disabled = false;
             });
@@ -330,38 +385,55 @@
                     comboResponseDiv.classList.remove('hidden');
                     return;
                 }
-
                 comboResponseDiv.textContent = "Generando combos...";
                 comboResponseDiv.classList.remove('hidden');
                 generateComboBtn.disabled = true;
-
                 const systemInstruction = "Eres un entrenador de boxeo experto. Genera 3 combinaciones de boxeo (usando notación numérica, ej: 1-2-3) basadas en el objetivo del usuario. Numera cada combo y añade una breve explicación de su propósito (1-2 frases).";
                 const response = await callGemini(userInput, systemInstruction);
-
                 comboResponseDiv.textContent = response;
                 generateComboBtn.disabled = false;
+            });
+
+            // --- Lógica de Pestañas Superiores ---
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('#tab-content > div');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Desactivar todos
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Activar el seleccionado
+                    button.classList.add('active');
+                    document.getElementById(button.dataset.target).classList.remove('hidden');
+                });
             });
 
             // --- Lógica de Navegación Móvil ---
             const navLinks = document.querySelectorAll('.mobile-nav-link');
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
-                    // Prevenir el salto de anclaje
                     e.preventDefault(); 
-                    
-                    // Quitar 'active' de todos
                     navLinks.forEach(nav => nav.classList.remove('active'));
-                    
-                    // Añadir 'active' al clickeado
                     link.classList.add('active');
                     
-                    // Desplazarse a la sección (si tiene un anclaje)
                     const targetId = link.getAttribute('href');
                     if (targetId.startsWith('#')) {
                         const targetElement = document.getElementById(targetId.substring(1));
                         if (targetElement) {
-                            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            // Ajustar el scroll para que el header no tape el título
+                            const headerOffset = 80; 
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                  
+                            window.scrollTo({
+                                 top: offsetPosition,
+                                 behavior: "smooth"
+                            });
                         }
+                    } else {
+                         window.scrollTo({ top: 0, behavior: "smooth" });
                     }
                 });
             });
